@@ -22,5 +22,7 @@ Solve example problems
 ```
 cd build
 ./nlopt_tutorial
+> found minimum at f(0.333329, 0.296200) = 0.544242
 ./matlab_rosenbrock
+> found minimum at f(0.786469, 0.617630) = 0.045677
 ```
