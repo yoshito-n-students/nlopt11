@@ -6,6 +6,7 @@
 int main(int argc, char *argv[]) {
   // Form the Rosenbrock problem (expecting a derivative-free algorithm).
   // It is also found in online document of Matlab's optimization toolbox
+  // https://www.mathworks.com/help/optim/ug/solve-nonlinear-optimization-problem-based.html
   nlopt::opt11 opt(/* algorithm = */ nlopt::LN_COBYLA, /* n_params = */ 2);
   opt.set_min_objective([](const std::vector<double> &x) -> double {
     const double y0 = x[1] - x[0] * x[0], y1 = 1. - x[0];

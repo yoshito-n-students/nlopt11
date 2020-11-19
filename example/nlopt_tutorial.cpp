@@ -5,6 +5,9 @@
 
 #include <nlopt11.hpp>
 
+// For the original version, see
+// https://nlopt.readthedocs.io/en/latest/NLopt_Tutorial/#example-in-cc
+
 // The objective function
 double f(const std::vector<double> &x, std::vector<double> &grad) {
   if (!grad.empty()) {
