@@ -28,7 +28,7 @@ double g(const std::vector<double> &x, std::vector<double> &grad, const double a
 int main(int argc, char *argv[]) {
   namespace sp = std::placeholders;
 
-  nlopt::opt11 opt(nlopt::LN_COBYLA, 2);
+  nlopt::opt11 opt(nlopt::LD_MMA, 2);
   // The objective function
   opt.set_min_objective(f);
   // Bounded constraints
