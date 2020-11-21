@@ -1,7 +1,7 @@
 # nlopt11
 nlplot::opt in flavor of c++11
 
-## How to build & run
+## How to build & run examples
 First time
 ```
 git clone git@github.com:yoshito-n-students/nlopt11.git
