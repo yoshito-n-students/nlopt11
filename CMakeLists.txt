@@ -2,6 +2,9 @@ project(nlopt11)
 
 include_directories(include)
 
+add_executable(version_and_algorithms example/version_and_algorithms.cpp)
+target_link_libraries(version_and_algorithms nlopt)
+
 add_executable(nlopt_tutorial example/nlopt_tutorial.cpp)
 target_link_libraries(nlopt_tutorial nlopt)
 
