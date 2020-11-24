@@ -100,7 +100,7 @@ find_package(catkin REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES nlopt11
+  LIBRARIES nlopt
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS libnlopt-dev
 )
