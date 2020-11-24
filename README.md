@@ -6,6 +6,7 @@ nlplot::opt in flavor of c++11
 * Ubuntu 20.04 with libnlopt-dev 2.6.1 installed by apt
 
 ## How to build & run examples
+### Without ROS
 First time
 ```
 git clone git@github.com:yoshito-n-students/nlopt11.git
@@ -33,3 +34,6 @@ cd build
 > found minimum at f(-1.717138, 1.595703, 1.827256, -0.763661, -0.763627) = -0.053950
 ...
 ```
+
+### With ROS
+Just clone this package in your ROS workspace, catkin_make and rosrun examples

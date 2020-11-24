@@ -1,15 +1,6 @@
-project(nlopt11)
-
-include_directories(include)
-
-add_executable(version_and_algorithms example/version_and_algorithms.cpp)
-target_link_libraries(version_and_algorithms nlopt)
-
-add_executable(nlopt_tutorial example/nlopt_tutorial.cpp)
-target_link_libraries(nlopt_tutorial nlopt)
-
-add_executable(matlab_rosenbrock example/matlab_rosenbrock.cpp)
-target_link_libraries(matlab_rosenbrock nlopt)
-
-add_executable(octave_qp5 example/octave_qp5.cpp)
-target_link_libraries(octave_qp5 nlopt)
+cmake_minimum_required(VERSION 3.0.2)
+if(DEFINED CATKIN_ENV)
+  include(CMakeListsROS.txt)
+else()
+  include(CMakeListsNoROS.txt)
+endif()
