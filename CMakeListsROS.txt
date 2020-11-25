@@ -143,6 +143,10 @@ add_executable(
   octave_qp5
   example/octave_qp5.cpp
 )
+add_executable(
+  umetani_book_3_9a
+  example/umetani_book_3_9a.cpp
+)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -165,6 +169,10 @@ target_link_libraries(
 )
 target_link_libraries(
   octave_qp5
+  nlopt
+)
+target_link_libraries(
+  umetani_book_3_9a
   nlopt
 )
 

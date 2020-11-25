@@ -14,3 +14,6 @@ target_link_libraries(matlab_rosenbrock nlopt)
 
 add_executable(octave_qp5 example/octave_qp5.cpp)
 target_link_libraries(octave_qp5 nlopt)
+
+add_executable(umetani_book_3_9a example/umetani_book_3_9a.cpp)
+target_link_libraries(umetani_book_3_9a nlopt)
