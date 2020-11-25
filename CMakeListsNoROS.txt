@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(nlopt11)
 
+add_compile_options(-std=c++11)
+
 include_directories(include)
 
 add_executable(version_and_algorithms example/version_and_algorithms.cpp)
@@ -20,3 +22,6 @@ target_link_libraries(umetani_book_3_9a nlopt)
 
 add_executable(umetani_book_3_9b example/umetani_book_3_9b.cpp)
 target_link_libraries(umetani_book_3_9b nlopt)
+
+add_executable(umetani_book_qp2 example/umetani_book_qp2.cpp)
+target_link_libraries(umetani_book_qp2 nlopt)

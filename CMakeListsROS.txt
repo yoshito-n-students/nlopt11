@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(nlopt11)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -151,6 +151,10 @@ add_executable(
   umetani_book_3_9b
   example/umetani_book_3_9b.cpp
 )
+add_executable(
+  umetani_book_qp2
+  example/umetani_book_qp2.cpp
+)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -181,6 +185,10 @@ target_link_libraries(
 )
 target_link_libraries(
   umetani_book_3_9b
+  nlopt
+)
+target_link_libraries(
+  umetani_book_qp2
   nlopt
 )
 
