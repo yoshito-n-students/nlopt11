@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
           grad[1] = 8. * x[1];
         }
         // constraint
-        return x[0] * x[0] + 4. * x[1] * x[1] - 1;
+        return x[0] * x[0] + 4. * x[1] * x[1] - 1.;
       },
       /* tolerance = */ 1e-8);
   opt.set_xtol_rel(1e-4);
