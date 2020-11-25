@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     // gradients
     if (!grad.empty()) {
       grad[0] = 2. * x[0];
-      grad[1] = 2. * x[1];
+      grad[1] = -2. * x[1];
     }
     // objective func
     return x[0] * x[0] - x[1] * x[1];
