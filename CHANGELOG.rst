@@ -2,9 +2,10 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.0.2 (2020-XX-XX)
+0.0.2 (2020-11-26)
 ------------------
-* Add more examples (umetani_book_3_9{a,b}, matlab_qp400)
+* Explicitly compile as c++11
+* Add more examples from a Umetani's book
 
 0.0.1 (2020-11-24)
 ------------------
