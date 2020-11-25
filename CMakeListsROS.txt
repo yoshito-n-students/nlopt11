@@ -147,6 +147,10 @@ add_executable(
   umetani_book_3_9a
   example/umetani_book_3_9a.cpp
 )
+add_executable(
+  umetani_book_3_9b
+  example/umetani_book_3_9b.cpp
+)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -173,6 +177,10 @@ target_link_libraries(
 )
 target_link_libraries(
   umetani_book_3_9a
+  nlopt
+)
+target_link_libraries(
+  umetani_book_3_9b
   nlopt
 )
 
