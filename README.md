@@ -2,8 +2,9 @@
 nlplot::opt in flavor of c++11
 
 ## Tested environments
-* Ubuntu 18.04 with libnlopt-dev 2.4.2 installed by apt
 * Ubuntu 20.04 with libnlopt-dev 2.6.1 installed by apt
+* Ubuntu 18.04 with libnlopt-dev 2.4.2 installed by apt
+* Ubuntu 16.04 with libnlopt-dev 2.4.2 installed by apt
 
 ## How to build & run examples
 ### Without ROS
