@@ -10,8 +10,8 @@
 
 namespace nlopt {
 
-////////////////////////////////////////////////////////
-// A enhanced version of nlplot::opt in flavor of c++11
+/////////////////////////////////////////////////////////
+// An enhanced version of nlplot::opt in flavor of c++11
 
 class opt11 : public opt {
 public:
