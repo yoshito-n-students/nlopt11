@@ -2,6 +2,10 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.3 (2020-12-XX)
+------------------
+* Add opt11x, a faster version of opt11 but requiring dimension at compilation time
+
 0.0.2 (2020-11-26)
 ------------------
 * Explicitly compile as c++11
