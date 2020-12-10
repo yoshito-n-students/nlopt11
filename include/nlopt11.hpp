@@ -165,7 +165,7 @@ protected:
     // c -> cpp
     const std::vector<double> x = carray2vector(x_c, n);
     // Dispatch
-    return (*reinterpret_cast<nfunc_type *>(nf))(x);
+    return (*static_cast<nfunc_type *>(nf))(x);
   }
 
   static double dispatch_dfunc(unsigned int n, const double *x_c, double *grad_c, void *df) {
@@ -173,7 +173,7 @@ protected:
     const std::vector<double> x = carray2vector(x_c, n);
     std::vector<double> grad = carray2vector(grad_c, n);
     // Dispatch
-    const double result = (*reinterpret_cast<dfunc_type *>(df))(x, grad);
+    const double result = (*static_cast<dfunc_type *>(df))(x, grad);
     // cpp -> c
     vector2carray(grad, grad_c);
     return result;
@@ -188,7 +188,7 @@ protected:
     std::vector<double> result = carray2vector(result_c, m);
     const std::vector<double> x = carray2vector(x_c, n);
     // Dispatch
-    (*reinterpret_cast<mnfunc_type *>(mnf))(result, x);
+    (*static_cast<mnfunc_type *>(mnf))(result, x);
     // cpp -> c
     vector2carray(result, result_c);
   }
@@ -200,7 +200,7 @@ protected:
     const std::vector<double> x = carray2vector(x_c, n);
     std::vector<std::vector<double>> grad = carray2vector2d(grad_c, m, n);
     // Dispatch
-    (*reinterpret_cast<mdfunc_type *>(mdf))(result, x, grad);
+    (*static_cast<mdfunc_type *>(mdf))(result, x, grad);
     // cpp -> c
     vector2carray(result, result_c);
     vector2d2carray(grad, grad_c);
@@ -208,14 +208,14 @@ protected:
 
   template <class Func> static void *free_(void *func) {
     if (func) {
-      delete reinterpret_cast<Func *>(func);
+      delete static_cast<Func *>(func);
     }
     return NULL;
   }
 
   template <class Func> static void *copy_(void *func) {
     if (func) {
-      return new Func(*reinterpret_cast<Func *>(func));
+      return new Func(*static_cast<Func *>(func));
     } else {
       return NULL;
     }
