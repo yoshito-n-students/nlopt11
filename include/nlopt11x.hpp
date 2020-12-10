@@ -144,6 +144,9 @@ public:
                                   std::vector<double>(tol.begin(), tol.end()));
   }
 
+  // TODO: add methods to get/set properties by std::array<>
+  //   ex. upper/lower bounds, xtol_abs, initial_step, ...
+
   ////////////////
   // Optimization
 
