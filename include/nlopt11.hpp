@@ -32,10 +32,15 @@ public:
       mdfunc_type;
 
 public:
-  ///////////////////////////////////////////
-  // Constructors (inherits from the parent)
+  /////////////////////////////////////////////////////
+  // Constructors (basically inherits from the parent)
 
   using opt::opt;
+
+  opt11 &operator=(const opt &f) {
+    opt::operator=(f);
+    return *this;
+  }
 
   //////////////////////
   // Objective function
