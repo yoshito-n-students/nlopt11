@@ -1,3 +1,4 @@
+#include <cmath>
 #include <cstdio>
 #include <functional> // for std::bind()
 #include <limits>
@@ -12,9 +13,9 @@
 double f(const std::vector<double> &x, std::vector<double> &grad) {
   if (!grad.empty()) {
     grad[0] = 0.0;
-    grad[1] = 0.5 / sqrt(x[1]);
+    grad[1] = 0.5 / std::sqrt(x[1]);
   }
-  return sqrt(x[1]);
+  return std::sqrt(x[1]);
 }
 
 // A constraint with coefficients
