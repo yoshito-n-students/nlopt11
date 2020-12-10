@@ -10,8 +10,11 @@
 
 namespace nlopt {
 
-/////////////////////////////////////////////////////////
-// An enhanced version of nlplot::opt in flavor of c++11
+//////////////////////////////////////////////////////////
+// An enhanced version of nlplot::opt in flavor of c++11.
+// nlopt::opt11 supports dimension unknown until runtime.
+// This makes user codes flexible but also makes
+// unavoidable copy between c array and std::vector.
 
 class opt11 : public opt {
 public:
