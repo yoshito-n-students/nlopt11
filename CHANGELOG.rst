@@ -2,9 +2,10 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.0.3 (2020-12-XX)
+0.0.3 (2020-12-11)
 ------------------
 * Add opt11x, a faster version of opt11 but requiring dimension at compilation time
+* Edit and add more examples to demonstrate opt11x and algorithm types
 
 0.0.2 (2020-11-26)
 ------------------
