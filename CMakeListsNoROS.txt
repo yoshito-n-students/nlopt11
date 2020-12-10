@@ -11,6 +11,9 @@ target_link_libraries(version_and_algorithms nlopt)
 add_executable(nlopt_tutorial example/nlopt_tutorial.cpp)
 target_link_libraries(nlopt_tutorial nlopt)
 
+add_executable(matlab_qp2 example/matlab_qp2.cpp)
+target_link_libraries(matlab_qp2 nlopt)
+
 add_executable(matlab_qp400 example/matlab_qp400.cpp)
 target_link_libraries(matlab_qp400 nlopt)
 
