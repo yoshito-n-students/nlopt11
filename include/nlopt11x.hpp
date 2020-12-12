@@ -102,15 +102,13 @@ public:
   template <std::size_t M>
   void add_inequality_mconstraint(const mnfunc_type<M> &mnf, const std::array<double, M> &tol) {
     opt::add_inequality_mconstraint(dispatch_mnfunc<M>, new mnfunc_type<M>(mnf),
-                                    free_<mnfunc_type<M>>, copy_<mnfunc_type<M>>,
-                                    std::vector<double>(tol.begin(), tol.end()));
+                                    free_<mnfunc_type<M>>, copy_<mnfunc_type<M>>, to_vector(tol));
   }
 
   template <std::size_t M>
   void add_inequality_mconstraint(const mdfunc_type<M> &mdf, const std::array<double, M> &tol) {
     opt::add_inequality_mconstraint(dispatch_mdfunc<M>, new mdfunc_type<M>(mdf),
-                                    free_<mdfunc_type<M>>, copy_<mdfunc_type<M>>,
-                                    std::vector<double>(tol.begin(), tol.end()));
+                                    free_<mdfunc_type<M>>, copy_<mdfunc_type<M>>, to_vector(tol));
   }
 
   //////////////////////////////////
@@ -133,19 +131,62 @@ public:
   template <std::size_t M>
   void add_equality_mconstraint(const mnfunc_type<M> &mnf, const std::array<double, M> &tol) {
     opt::add_equality_mconstraint(dispatch_mnfunc<M>, new mnfunc_type<M>(mnf),
-                                  free_<mnfunc_type<M>>, copy_<mnfunc_type<M>>,
-                                  std::vector<double>(tol.begin(), tol.end()));
+                                  free_<mnfunc_type<M>>, copy_<mnfunc_type<M>>, to_vector(tol));
   }
 
   template <std::size_t M>
   void add_equality_mconstraint(const mdfunc_type<M> &mdf, const std::array<double, M> &tol) {
     opt::add_equality_mconstraint(dispatch_mdfunc<M>, new mdfunc_type<M>(mdf),
-                                  free_<mdfunc_type<M>>, copy_<mdfunc_type<M>>,
-                                  std::vector<double>(tol.begin(), tol.end()));
+                                  free_<mdfunc_type<M>>, copy_<mdfunc_type<M>>, to_vector(tol));
   }
 
+  /////////////////////
+  // Bound constraints
+
+  // no "using opt::set_lower_bounds;" here to hide set_lower_bounds(const std::vector<double> &).
+  // or a call of "o.set_lower_bounds({0., 0.})" becames ambiguous.
+
+  void set_lower_bounds(const double lb) { opt::set_lower_bounds(lb); }
+
+  void set_lower_bounds(const std::array<double, N> &lb) { opt::set_lower_bounds(to_vector(lb)); }
+
+  using opt::get_lower_bounds;
+
+  void get_lower_bounds(std::array<double, N> &lb) const { lb = get_lower_bounds(); }
+
+  std::array<double, N> get_lower_bounds() const { return to_array<N>(opt::get_lower_bounds()); }
+
+  // no "using opt::set_upper_bounds;" here to hide set_upper_bounds(const std::vector<double> &),
+  // or a call of "o.set_upper_bounds({0., 0.})" becames ambiguous.
+
+  void set_upper_bounds(const double ub) { opt::set_upper_bounds(ub); }
+
+  void set_upper_bounds(const std::array<double, N> &ub) { opt::set_upper_bounds(to_vector(ub)); }
+
+  using opt::get_upper_bounds;
+
+  void get_upper_bounds(std::array<double, N> &ub) const { ub = get_upper_bounds(); }
+
+  std::array<double, N> get_upper_bounds() const { return to_array<N>(opt::get_upper_bounds()); }
+
+  /////////////////////
+  // Stopping criteria
+
+  // no "using opt::set_xtol_abs;" here to hide set_xtol_abs(const std::vector<double> &),
+  // or a call of "o.set_xtol_abs({0., 0.})" becames ambiguous.
+
+  void set_xtol_abs(const double tol) { opt::set_xtol_abs(tol); }
+
+  void set_xtol_abs(const std::array<double, N> &tol) { opt::set_xtol_abs(to_vector(tol)); }
+
+  using opt::get_xtol_abs;
+
+  void get_xtol_abs(std::array<double, N> &tol) const { tol = get_xtol_abs(); }
+
+  std::array<double, N> get_xtol_abs() const { return to_array<N>(opt::get_xtol_abs()); }
+
   // TODO: add methods to get/set properties by std::array<>
-  //   ex. upper/lower bounds, xtol_abs, initial_step, ...
+  //   ex. initial_step & default_initial_step
 
   ////////////////
   // Optimization
@@ -153,13 +194,29 @@ public:
   using opt::optimize;
 
   result optimize(std::array<double, N> &x, double &opt_f) {
-    std::vector<double> vx(x.begin(), x.end());
+    std::vector<double> vx = to_vector(x);
     const result res = opt::optimize(vx, opt_f);
-    std::copy(vx.begin(), vx.end(), x.begin());
+    x = to_array<N>(vx);
     return res;
   }
 
 protected:
+  //////////////////////////////
+  // std::array <-> std::vector
+
+  template <std::size_t M> static std::array<double, M> to_array(const std::vector<double> &v) {
+    if (v.size() != M) {
+      throw std::invalid_argument("Vector size mismatch");
+    }
+    std::array<double, M> a;
+    std::copy(v.begin(), v.end(), a.begin());
+    return a;
+  }
+
+  template <std::size_t M> static std::vector<double> to_vector(const std::array<double, M> &a) {
+    return std::vector<double>(a.begin(), a.end());
+  }
+
   ///////////////////////////////////
   // C-style wrappers (internal use)
 
