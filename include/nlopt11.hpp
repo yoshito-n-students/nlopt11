@@ -130,22 +130,22 @@ protected:
   /////////////////////////
   // C <-> C++ conversions
 
-  static std::vector<double> carray2vector(const double *const arr, const unsigned int n) {
+  static std::vector<double> to_vector(const double *const arr, const unsigned int n) {
     return arr ? std::vector<double>(arr, arr + n) : std::vector<double>();
   }
 
-  static void vector2carray(const std::vector<double> &vec, double *const arr) {
+  static void to_carray(const std::vector<double> &vec, double *const arr) {
     if (arr) {
       std::copy(vec.begin(), vec.end(), arr);
     }
   }
 
-  static std::vector<std::vector<double>> carray2vector2d(const double *arr, const unsigned int m,
-                                                          const unsigned int n) {
+  static std::vector<std::vector<double>> to_vector2d(const double *arr, const unsigned int m,
+                                                      const unsigned int n) {
     if (arr) {
       std::vector<std::vector<double>> vec2d(m);
       for (std::vector<double> &vec : vec2d) {
-        vec = carray2vector(arr, n);
+        vec = to_vector(arr, n);
         arr += n;
       }
       return vec2d;
@@ -154,10 +154,10 @@ protected:
     }
   }
 
-  static void vector2d2carray(const std::vector<std::vector<double>> &vec2d, double *arr) {
+  static void to_carray2d(const std::vector<std::vector<double>> &vec2d, double *arr) {
     if (arr) {
       for (const std::vector<double> &vec : vec2d) {
-        vector2carray(vec, arr);
+        to_carray(vec, arr);
         arr += vec.size();
       }
     }
@@ -171,19 +171,19 @@ protected:
       throw std::invalid_argument("Non-null gradient for a derivative-free function");
     }
     // c -> cpp
-    const std::vector<double> x = carray2vector(x_c, n);
+    const std::vector<double> x = to_vector(x_c, n);
     // Dispatch
     return (*static_cast<nfunc_type *>(nf))(x);
   }
 
   static double dispatch_dfunc(unsigned int n, const double *x_c, double *grad_c, void *df) {
     // c -> cpp
-    const std::vector<double> x = carray2vector(x_c, n);
-    std::vector<double> grad = carray2vector(grad_c, n);
+    const std::vector<double> x = to_vector(x_c, n);
+    std::vector<double> grad = to_vector(grad_c, n);
     // Dispatch
     const double result = (*static_cast<dfunc_type *>(df))(x, grad);
     // cpp -> c
-    vector2carray(grad, grad_c);
+    to_carray(grad, grad_c);
     return result;
   }
 
@@ -193,25 +193,25 @@ protected:
       throw std::invalid_argument("Non-null gradient for a vector-valued derivative-free function");
     }
     // c -> cpp
-    std::vector<double> result = carray2vector(result_c, m);
-    const std::vector<double> x = carray2vector(x_c, n);
+    std::vector<double> result = to_vector(result_c, m);
+    const std::vector<double> x = to_vector(x_c, n);
     // Dispatch
     (*static_cast<mnfunc_type *>(mnf))(result, x);
     // cpp -> c
-    vector2carray(result, result_c);
+    to_carray(result, result_c);
   }
 
   static void dispatch_mdfunc(unsigned int m, double *result_c, unsigned int n, const double *x_c,
                               double *grad_c, void *mdf) {
     // c -> cpp
-    std::vector<double> result = carray2vector(result_c, m);
-    const std::vector<double> x = carray2vector(x_c, n);
-    std::vector<std::vector<double>> grad = carray2vector2d(grad_c, m, n);
+    std::vector<double> result = to_vector(result_c, m);
+    const std::vector<double> x = to_vector(x_c, n);
+    std::vector<std::vector<double>> grad = to_vector2d(grad_c, m, n);
     // Dispatch
     (*static_cast<mdfunc_type *>(mdf))(result, x, grad);
     // cpp -> c
-    vector2carray(result, result_c);
-    vector2d2carray(grad, grad_c);
+    to_carray(result, result_c);
+    to_carray2d(grad, grad_c);
   }
 
   template <class Func> static void *free_(void *func) {
