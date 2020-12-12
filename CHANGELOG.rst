@@ -5,6 +5,7 @@ Changelog for package nlopt11
 0.0.4 (2020-12-XX)
 ------------------
 * Eliminate cmake warnings
+* Add more std::array-based methods to opt11x
 
 0.0.3 (2020-12-11)
 ------------------

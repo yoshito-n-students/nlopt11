@@ -143,50 +143,52 @@ public:
   /////////////////////
   // Bound constraints
 
-  // no "using opt::set_lower_bounds;" here to hide set_lower_bounds(const std::vector<double> &).
-  // or a call of "o.set_lower_bounds({0., 0.})" becames ambiguous.
+#define NLOPT11X_GETSET_ARRAY(name)                                                                \
+  using opt::get_##name;                                                                           \
+                                                                                                   \
+  void get_##name(std::array<double, N> &val) const { to_array(opt::get_##name(), val); }          \
+                                                                                                   \
+  std::array<double, N> get_##name() const { return to_array<N>(opt::get_##name()); }              \
+                                                                                                   \
+  /* no "using opt::set_##name;" here to hide set_##name(const std::vector<double> &), */          \
+  /* or a call of "o.set_##name({0., 0.})" becames ambiguous.                          */          \
+                                                                                                   \
+  void set_##name(const double val) { opt::set_##name(val); }                                      \
+                                                                                                   \
+  void set_##name(const std::array<double, N> &val) { opt::set_##name(to_vector(val)); }
 
-  void set_lower_bounds(const double lb) { opt::set_lower_bounds(lb); }
-
-  void set_lower_bounds(const std::array<double, N> &lb) { opt::set_lower_bounds(to_vector(lb)); }
-
-  using opt::get_lower_bounds;
-
-  void get_lower_bounds(std::array<double, N> &lb) const { lb = get_lower_bounds(); }
-
-  std::array<double, N> get_lower_bounds() const { return to_array<N>(opt::get_lower_bounds()); }
-
-  // no "using opt::set_upper_bounds;" here to hide set_upper_bounds(const std::vector<double> &),
-  // or a call of "o.set_upper_bounds({0., 0.})" becames ambiguous.
-
-  void set_upper_bounds(const double ub) { opt::set_upper_bounds(ub); }
-
-  void set_upper_bounds(const std::array<double, N> &ub) { opt::set_upper_bounds(to_vector(ub)); }
-
-  using opt::get_upper_bounds;
-
-  void get_upper_bounds(std::array<double, N> &ub) const { ub = get_upper_bounds(); }
-
-  std::array<double, N> get_upper_bounds() const { return to_array<N>(opt::get_upper_bounds()); }
+  NLOPT11X_GETSET_ARRAY(lower_bounds);
+  NLOPT11X_GETSET_ARRAY(upper_bounds);
 
   /////////////////////
   // Stopping criteria
 
-  // no "using opt::set_xtol_abs;" here to hide set_xtol_abs(const std::vector<double> &),
-  // or a call of "o.set_xtol_abs({0., 0.})" becames ambiguous.
+  NLOPT11X_GETSET_ARRAY(xtol_abs);
 
-  void set_xtol_abs(const double tol) { opt::set_xtol_abs(tol); }
+  /////////////////////////////////
+  // Algorithm-specific parameters
 
-  void set_xtol_abs(const std::array<double, N> &tol) { opt::set_xtol_abs(to_vector(tol)); }
+  NLOPT11X_GETSET_ARRAY(initial_step);
 
-  using opt::get_xtol_abs;
+#undef NLOPT11X_GETSET_ARRAY
 
-  void get_xtol_abs(std::array<double, N> &tol) const { tol = get_xtol_abs(); }
+  void get_initial_step(const std::array<double, N> &x, std::array<double, N> &dx) const {
+    std::vector<double> vdx = to_vector(dx);
+    opt::get_initial_step(to_vector(x), vdx);
+    to_array(vdx, dx);
+  }
 
-  std::array<double, N> get_xtol_abs() const { return to_array<N>(opt::get_xtol_abs()); }
+  using opt::get_initial_step_;
 
-  // TODO: add methods to get/set properties by std::array<>
-  //   ex. initial_step & default_initial_step
+  std::array<double, N> get_initial_step_(const std::array<double, N> &x) const {
+    return to_array<N>(opt::get_initial_step_(to_vector(x)));
+  }
+
+  using opt::set_default_initial_step;
+
+  void set_default_initial_step(const std::array<double, N> &x) {
+    opt::set_default_initial_step(to_vector(x));
+  }
 
   ////////////////
   // Optimization
@@ -196,7 +198,7 @@ public:
   result optimize(std::array<double, N> &x, double &opt_f) {
     std::vector<double> vx = to_vector(x);
     const result res = opt::optimize(vx, opt_f);
-    x = to_array<N>(vx);
+    to_array(vx, x);
     return res;
   }
 
@@ -204,12 +206,17 @@ protected:
   //////////////////////////////
   // std::array <-> std::vector
 
-  template <std::size_t M> static std::array<double, M> to_array(const std::vector<double> &v) {
-    if (v.size() != M) {
+  template <std::size_t M>
+  static void to_array(const std::vector<double> &v, std::array<double, M> &a) {
+    if (v.size() != a.size()) {
       throw std::invalid_argument("Vector size mismatch");
     }
-    std::array<double, M> a;
     std::copy(v.begin(), v.end(), a.begin());
+  }
+
+  template <std::size_t M> static std::array<double, M> to_array(const std::vector<double> &v) {
+    std::array<double, M> a;
+    to_array(v, a);
     return a;
   }
 
