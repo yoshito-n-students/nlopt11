@@ -2,6 +2,10 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.5 (202X-XX-XX)
+------------------
+* Minor refactors in examples
+
 0.0.4 (2020-12-13)
 ------------------
 * Eliminate cmake warnings
