@@ -11,11 +11,12 @@
 
 // The objective function
 double f(const std::vector<double> &x, std::vector<double> &grad) {
+  const double val = std::sqrt(x[1]);
   if (!grad.empty()) {
     grad[0] = 0.0;
-    grad[1] = 0.5 / std::sqrt(x[1]);
+    grad[1] = 0.5 / val;
   }
-  return std::sqrt(x[1]);
+  return val;
 }
 
 // A constraint with coefficients
