@@ -151,7 +151,7 @@ public:
   std::array<double, N> get_##name() const { return to_array<N>(opt::get_##name()); }              \
                                                                                                    \
   /* no "using opt::set_##name;" here to hide set_##name(const std::vector<double> &), */          \
-  /* or a call of "o.set_##name({0., 0.})" becames ambiguous.                          */          \
+  /* or a call of "o.set_##name({0., 0.})" becomes ambiguous.                          */          \
                                                                                                    \
   void set_##name(const double val) { opt::set_##name(val); }                                      \
                                                                                                    \
@@ -184,7 +184,7 @@ public:
     return to_array<N>(opt::get_initial_step_(to_vector(x)));
   }
 
-  using opt::set_default_initial_step;
+  // no "using opt::set_default_initial_step;" to hide the std::vector version
 
   void set_default_initial_step(const std::array<double, N> &x) {
     opt::set_default_initial_step(to_vector(x));
