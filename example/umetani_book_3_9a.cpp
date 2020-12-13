@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
   try {
     std::vector<double> x(2, std::sqrt(0.2));
     double minf;
-    nlopt::result result = opt.optimize(x, minf);
+    const nlopt::result result = opt.optimize(x, minf);
     std::printf("found minimum at f(%f, %f) = %f\n", x[0], x[1], minf);
   } catch (std::exception &e) {
     std::printf("nlopt failed: %s\n", e.what());

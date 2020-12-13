@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   try {
     std::array<double, 5> x = {-1.8, 1.7, 1.9, -0.8, -0.8};
     double minf;
-    nlopt::result result = opt.optimize(x, minf);
+    const nlopt::result result = opt.optimize(x, minf);
     std::printf("found minimum at f(%f, %f, %f, %f, %f) = %f\n", x[0], x[1], x[2], x[3], x[4],
                 minf);
   } catch (const std::exception &e) {
