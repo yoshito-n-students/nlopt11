@@ -2,8 +2,9 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.0.5 (202X-XX-XX)
+0.0.5 (2020-12-27)
 ------------------
+* Expose std::vector versions of set_xxx() besides std::array versions in opt11x
 * Minor refactors in examples
 
 0.0.4 (2020-12-13)
