@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <functional>
+#include <initializer_list>
 #include <stdexcept>
 #include <vector>
 
@@ -150,10 +151,11 @@ public:
                                                                                                    \
   std::array<double, N> get_##name() const { return to_array<N>(opt::get_##name()); }              \
                                                                                                    \
-  /* no "using opt::set_##name;" here to hide set_##name(const std::vector<double> &), */          \
-  /* or a call of "o.set_##name({0., 0.})" becomes ambiguous.                          */          \
+  using opt::set_##name;                                                                           \
                                                                                                    \
-  void set_##name(const double val) { opt::set_##name(val); }                                      \
+  /* Without this, a call of "o.set_##name({0., 0.})" becomes ambiguous */                         \
+  /* because we have both std::array and std::vector versions           */                         \
+  void set_##name(std::initializer_list<double> val) { opt::set_##name(val); }                     \
                                                                                                    \
   void set_##name(const std::array<double, N> &val) { opt::set_##name(to_vector(val)); }
 
@@ -184,7 +186,11 @@ public:
     return to_array<N>(opt::get_initial_step_(to_vector(x)));
   }
 
-  // no "using opt::set_default_initial_step;" to hide the std::vector version
+  using opt::set_default_initial_step;
+
+  void set_default_initial_step(std::initializer_list<double> x) {
+    opt::set_default_initial_step(x);
+  }
 
   void set_default_initial_step(const std::array<double, N> &x) {
     opt::set_default_initial_step(to_vector(x));
