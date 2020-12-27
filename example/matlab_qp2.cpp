@@ -26,11 +26,9 @@ nlopt::opt11x<2> form(const nlopt::algorithm a) {
 }
 
 void solve(nlopt::opt11x<2> &opt, const std::array<double, 2> &initial_x) {
-  std::array<double, 2> x = initial_x;
-  double minf;
-  const nlopt::result result = opt.optimize(x, minf);
-  std::printf("  found minimum at f(%f, %f) = %f, started from (%f, %f)\n", x[0], x[1], minf,
-              initial_x[0], initial_x[1]);
+  const std::array<double, 2> x = opt.optimize(initial_x);
+  std::printf("  found minimum at f(%f, %f) = %f, started from (%f, %f)\n", x[0], x[1],
+              opt.last_optimum_value(), initial_x[0], initial_x[1]);
 }
 
 int main(int argc, char *argv[]) {

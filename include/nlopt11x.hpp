@@ -237,6 +237,14 @@ public:
     return res;
   }
 
+  std::array<double, N> optimize(const std::array<double, N> &x) {
+    return to_array<N>(opt::optimize(to_vector(x)));
+  }
+
+  std::array<double, N> optimize(const double (&x)[N]) {
+    return to_array<N>(opt::optimize(to_vector(x)));
+  }
+
 protected:
   //////////////////////////////
   // std::array <-> std::vector

@@ -47,10 +47,8 @@ int main(int argc, char *argv[]) {
 
   // Solve it!
   try {
-    std::array<double, 2> x = {2., 0.};
-    double minf;
-    const nlopt::result result = opt.optimize(x, minf);
-    std::printf("found minimum at f(%f, %f) = %f\n", x[0], x[1], minf);
+    const std::array<double,2> x = opt.optimize({2.,0.});
+    std::printf("found minimum at f(%f, %f) = %f\n", x[0], x[1], opt.last_optimum_value());
   } catch (const std::exception &e) {
     std::printf("nlopt failed: %s\n", e.what());
   }
