@@ -104,12 +104,16 @@ public:
   // (ex. when mnf is given as a function pointer, lambda expression, etc.).
   // So this method first deduces M only with the argument tol
   // and then deduces the type of the argument mf by calling an overloaded impl method.
-  template <class F, std::size_t M> void add_inequality_mconstraint(F mf, const double (&tol)[M]) {
+  template <class F, std::size_t M>
+  void add_inequality_mconstraint(F mf, const std::array<double, M> &tol) {
     add_inequality_mconstraint_impl<M>(mf, to_vector(tol));
   }
 
-  template <class F, std::size_t M>
-  void add_inequality_mconstraint(F mf, const std::array<double, M> &tol) {
+  // This method matches a call of "o.add_xxx(xxx, {0., 0.})"
+  // and successfully deduces the template param M.
+  // If this method does not exist, the call matches the above std::array version
+  // but does not deduce M because initialization by "{0., 0.}" is valid for any M >= 2.
+  template <class F, std::size_t M> void add_inequality_mconstraint(F mf, const double (&tol)[M]) {
     add_inequality_mconstraint_impl<M>(mf, to_vector(tol));
   }
 
@@ -179,13 +183,12 @@ public:
                                                                                                    \
   using opt::set_##name;                                                                           \
                                                                                                    \
-  /* This method matches a call of "o.set_xxx({0., 0.})".                        */                \
-  /* Without this method, the call becomes ambiguous                             */                \
-  /* because "{0., 0.}" is treated as an initializer list                        */                \
-  /* and the call matches both std::array and std::vector versions of set_xxx(). */                \
-  void set_##name(const double(&val)[N]) { opt::set_##name(to_vector(val)); }                      \
+  void set_##name(const std::array<double, N> &val) { opt::set_##name(to_vector(val)); }           \
                                                                                                    \
-  void set_##name(const std::array<double, N> &val) { opt::set_##name(to_vector(val)); }
+  /* This method matches a call of "o.set_xxx({0., 0.})".                    */                    \
+  /* If this method does not exist, the call does not compile                */                    \
+  /* because matching both std::array and std::vector versions of set_xxx(). */                    \
+  void set_##name(const double(&val)[N]) { opt::set_##name(to_vector(val)); }
 
   NLOPT11X_GETSET_ARRAY(lower_bounds);
   NLOPT11X_GETSET_ARRAY(upper_bounds);
