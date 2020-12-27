@@ -216,10 +216,6 @@ public:
 
   using opt::set_default_initial_step;
 
-  void set_default_initial_step(const double (&x)[N]) {
-    opt::set_default_initial_step(to_vector(x));
-  }
-
   void set_default_initial_step(const std::array<double, N> &x) {
     opt::set_default_initial_step(to_vector(x));
   }
