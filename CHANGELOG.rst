@@ -2,6 +2,10 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.6 (202X-XX-XX)
+------------------
+* Make opt11x::add_xxx_mconstraint() callable without the explicit template param M
+
 0.0.5 (2020-12-27)
 ------------------
 * Expose std::vector versions of set_xxx() besides std::array versions in opt11x

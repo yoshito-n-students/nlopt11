@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
         // objective func
         return y0 * y0 + y1 * y1;
       });
-  opt.add_inequality_mconstraint<5>(
+  opt.add_inequality_mconstraint(
       [](std::array<double, 5> &result, const std::array<double, 2> &x,
          std::array<std::array<double, 2>, 5> *const grad) -> void {
         // gradients

@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
                  y1 = x[0] * x[0] * x[0] + x[1] * x[1] * x[1] + 1.;
     return -std::exp(y0) + 0.5 * y1 * y1;
   });
-  opt.add_equality_mconstraint<2>(
+  opt.add_equality_mconstraint(
       [](std::array<double, 2> &result, const std::array<double, 5> &x) -> void {
         const double y0 = x[0] * x[0], y1 = x[1] * x[1];
         result[0] = y0 + y1 + x[2] * x[2] + x[3] * x[3] + x[4] * x[4] - 10.;

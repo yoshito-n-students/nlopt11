@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <array>
 #include <functional>
-#include <initializer_list>
 #include <stdexcept>
 #include <vector>
 
@@ -100,18 +99,34 @@ public:
 
   using opt::add_inequality_mconstraint;
 
+  // This method cannot be declared like "add_xxx(const mnfunc_type<M> & mnf, ...)"
+  // because M in mnfunc_type<M> is not deduced in most cases
+  // (ex. when mnf is given as a function pointer, lambda expression, etc.).
+  // So this method first deduces M only with the argument tol
+  // and then deduces the type of the argument mf by calling an overloaded impl method.
+  template <class F, std::size_t M> void add_inequality_mconstraint(F mf, const double (&tol)[M]) {
+    add_inequality_mconstraint_impl<M>(mf, to_vector(tol));
+  }
+
+  template <class F, std::size_t M>
+  void add_inequality_mconstraint(F mf, const std::array<double, M> &tol) {
+    add_inequality_mconstraint_impl<M>(mf, to_vector(tol));
+  }
+
+protected:
   template <std::size_t M>
-  void add_inequality_mconstraint(const mnfunc_type<M> &mnf, const std::array<double, M> &tol) {
+  void add_inequality_mconstraint_impl(const mnfunc_type<M> &mnf, const std::vector<double> &tol) {
     opt::add_inequality_mconstraint(dispatch_mnfunc<M>, new mnfunc_type<M>(mnf),
-                                    free_<mnfunc_type<M>>, copy_<mnfunc_type<M>>, to_vector(tol));
+                                    free_<mnfunc_type<M>>, copy_<mnfunc_type<M>>, tol);
   }
 
   template <std::size_t M>
-  void add_inequality_mconstraint(const mdfunc_type<M> &mdf, const std::array<double, M> &tol) {
+  void add_inequality_mconstraint_impl(const mdfunc_type<M> &mdf, const std::vector<double> &tol) {
     opt::add_inequality_mconstraint(dispatch_mdfunc<M>, new mdfunc_type<M>(mdf),
-                                    free_<mdfunc_type<M>>, copy_<mdfunc_type<M>>, to_vector(tol));
+                                    free_<mdfunc_type<M>>, copy_<mdfunc_type<M>>, tol);
   }
 
+public:
   //////////////////////////////////
   // Nonlinear equality constraints
 
@@ -129,18 +144,29 @@ public:
 
   using opt::add_equality_mconstraint;
 
+  template <class F, std::size_t M> void add_equality_mconstraint(F mf, const double (&tol)[M]) {
+    add_equality_mconstraint_impl<M>(mf, to_vector(tol));
+  }
+
+  template <class F, std::size_t M>
+  void add_equality_mconstraint(F mf, const std::array<double, M> &tol) {
+    add_equality_mconstraint_impl<M>(mf, to_vector(tol));
+  }
+
+protected:
   template <std::size_t M>
-  void add_equality_mconstraint(const mnfunc_type<M> &mnf, const std::array<double, M> &tol) {
+  void add_equality_mconstraint_impl(const mnfunc_type<M> &mnf, const std::vector<double> &tol) {
     opt::add_equality_mconstraint(dispatch_mnfunc<M>, new mnfunc_type<M>(mnf),
-                                  free_<mnfunc_type<M>>, copy_<mnfunc_type<M>>, to_vector(tol));
+                                  free_<mnfunc_type<M>>, copy_<mnfunc_type<M>>, tol);
   }
 
   template <std::size_t M>
-  void add_equality_mconstraint(const mdfunc_type<M> &mdf, const std::array<double, M> &tol) {
+  void add_equality_mconstraint_impl(const mdfunc_type<M> &mdf, const std::vector<double> &tol) {
     opt::add_equality_mconstraint(dispatch_mdfunc<M>, new mdfunc_type<M>(mdf),
-                                  free_<mdfunc_type<M>>, copy_<mdfunc_type<M>>, to_vector(tol));
+                                  free_<mdfunc_type<M>>, copy_<mdfunc_type<M>>, tol);
   }
 
+public:
   /////////////////////
   // Bound constraints
 
@@ -153,9 +179,11 @@ public:
                                                                                                    \
   using opt::set_##name;                                                                           \
                                                                                                    \
-  /* Without this, a call of "o.set_##name({0., 0.})" becomes ambiguous */                         \
-  /* because we have both std::array and std::vector versions           */                         \
-  void set_##name(std::initializer_list<double> val) { opt::set_##name(val); }                     \
+  /* This method matches a call of "o.set_xxx({0., 0.})".                        */                \
+  /* Without this method, the call becomes ambiguous                             */                \
+  /* because "{0., 0.}" is treated as an initializer list                        */                \
+  /* and the call matches both std::array and std::vector versions of set_xxx(). */                \
+  void set_##name(const double(&val)[N]) { opt::set_##name(to_vector(val)); }                      \
                                                                                                    \
   void set_##name(const std::array<double, N> &val) { opt::set_##name(to_vector(val)); }
 
@@ -188,8 +216,8 @@ public:
 
   using opt::set_default_initial_step;
 
-  void set_default_initial_step(std::initializer_list<double> x) {
-    opt::set_default_initial_step(x);
+  void set_default_initial_step(const double (&x)[N]) {
+    opt::set_default_initial_step(to_vector(x));
   }
 
   void set_default_initial_step(const std::array<double, N> &x) {
@@ -228,6 +256,10 @@ protected:
 
   template <std::size_t M> static std::vector<double> to_vector(const std::array<double, M> &a) {
     return std::vector<double>(a.begin(), a.end());
+  }
+
+  template <std::size_t M> static std::vector<double> to_vector(const double (&a)[M]) {
+    return std::vector<double>(a, a + M);
   }
 
   ///////////////////////////////////
