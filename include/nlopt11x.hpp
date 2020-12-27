@@ -105,7 +105,7 @@ public:
   // So this method first deduces M only with the argument tol
   // and then deduces the type of the argument mf by calling an overloaded impl method.
   template <class F, std::size_t M>
-  void add_inequality_mconstraint(F mf, const std::array<double, M> &tol) {
+  void add_inequality_mconstraint(const F &mf, const std::array<double, M> &tol) {
     add_inequality_mconstraint_impl<M>(mf, to_vector(tol));
   }
 
@@ -113,7 +113,8 @@ public:
   // and successfully deduces the template param M.
   // If this method does not exist, the call matches the above std::array version
   // but does not deduce M because initialization by "{0., 0.}" is valid for any M >= 2.
-  template <class F, std::size_t M> void add_inequality_mconstraint(F mf, const double (&tol)[M]) {
+  template <class F, std::size_t M>
+  void add_inequality_mconstraint(const F &mf, const double (&tol)[M]) {
     add_inequality_mconstraint_impl<M>(mf, to_vector(tol));
   }
 
@@ -148,12 +149,13 @@ public:
 
   using opt::add_equality_mconstraint;
 
-  template <class F, std::size_t M> void add_equality_mconstraint(F mf, const double (&tol)[M]) {
+  template <class F, std::size_t M>
+  void add_equality_mconstraint(const F &mf, const double (&tol)[M]) {
     add_equality_mconstraint_impl<M>(mf, to_vector(tol));
   }
 
   template <class F, std::size_t M>
-  void add_equality_mconstraint(F mf, const std::array<double, M> &tol) {
+  void add_equality_mconstraint(const F &mf, const std::array<double, M> &tol) {
     add_equality_mconstraint_impl<M>(mf, to_vector(tol));
   }
 
