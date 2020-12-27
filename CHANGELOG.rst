@@ -2,7 +2,7 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.0.6 (202X-XX-XX)
+0.0.6 (2020-12-27)
 ------------------
 * Make opt11x::add_xxx_mconstraint() callable without the explicit template param M
 
