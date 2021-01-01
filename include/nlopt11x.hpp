@@ -23,10 +23,9 @@ public:
   // Function types
   // (namely '[m]{n,d}func_type'. m: vector-valued, n: derivative-free, d: gradient-based)
 
-  typedef std::function<double(const std::array<double, N> & /* x */)> nfunc_type;
-  typedef std::function<double(const std::array<double, N> & /* x */,
-                               std::array<double, N> * /* grad */)>
-      dfunc_type;
+  using nfunc_type = std::function<double(const std::array<double, N> & /* x */)>;
+  using dfunc_type = std::function<double(const std::array<double, N> & /* x */,
+                                          std::array<double, N> * /* grad */)>;
   template <std::size_t M>
   using mnfunc_type = std::function<void(std::array<double, M> & /* result */,
                                          const std::array<double, N> & /* x */)>;

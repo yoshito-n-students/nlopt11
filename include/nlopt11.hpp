@@ -22,17 +22,14 @@ public:
   // Function types
   // (namely '[m]{n,d}func_type'. m: vector-valued, n: derivative-free, d: gradient-based)
 
-  typedef std::function<double(const std::vector<double> & /* x */)> nfunc_type;
-  typedef std::function<double(const std::vector<double> & /* x */,
-                               std::vector<double> & /* grad */)>
-      dfunc_type;
-  typedef std::function<void(std::vector<double> & /* result */,
-                             const std::vector<double> & /* x */)>
-      mnfunc_type;
-  typedef std::function<void(std::vector<double> & /* result */,
-                             const std::vector<double> & /* x */,
-                             std::vector<std::vector<double>> & /* grad */)>
-      mdfunc_type;
+  using nfunc_type = std::function<double(const std::vector<double> & /* x */)>;
+  using dfunc_type =
+      std::function<double(const std::vector<double> & /* x */, std::vector<double> & /* grad */)>;
+  using mnfunc_type =
+      std::function<void(std::vector<double> & /* result */, const std::vector<double> & /* x */)>;
+  using mdfunc_type =
+      std::function<void(std::vector<double> & /* result */, const std::vector<double> & /* x */,
+                         std::vector<std::vector<double>> & /* grad */)>;
 
 public:
   /////////////////////////////////////////////////////
