@@ -38,6 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ros:${{ matrix.rosdistro }}-ros-core
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Prepare workspace
         run: |
