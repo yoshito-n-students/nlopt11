@@ -7,20 +7,20 @@ jobs:
   standalone:
     strategy:
       matrix:
-        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
+        include:
+          - os: ubuntu-16.04
+            deps: 'cmake libnlopt-dev'
+          - os: ubuntu-18.04
+            deps: 'cmake libnlopt-dev'
+          - os: ubuntu-20.04
+            deps: 'cmake libnlopt-cxx-dev'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies 1
-        if: matrix.os == 'ubuntu-16.04' || matrix.os == 'ubuntu-18.04'
+      - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install cmake libnlopt-dev
-      - name: Install dependencies 2
-        if: matrix.os == 'ubuntu-20.04'
-        run: |
-          sudo apt update
-          sudo apt install cmake libnlopt-dev libnlopt-cxx-dev
+          sudo apt install ${{ matrix.deps }}
       - name: Build
         run: |
           mkdir build
