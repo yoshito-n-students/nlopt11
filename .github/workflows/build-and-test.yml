@@ -37,7 +37,7 @@ jobs:
         rosdistro: [kinetic, melodic, noetic]
     runs-on: ubuntu-latest
     container:
-      image: ros:${{ matrix.rosdistro }}-ros-core
+      image: ros:${{ matrix.rosdistro }}-ros-base
     defaults:
       run:
         shell: bash
