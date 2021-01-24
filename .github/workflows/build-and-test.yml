@@ -38,13 +38,10 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ros:${{ matrix.rosdistro }}-ros-base
-    defaults:
-      run:
-        shell: bash
+#    defaults:
+#      run:
+#        shell: bash
     steps:
-#      - name: Prepare workspace
-#        run: |
-#          mkdir src
       - uses: actions/checkout@v2
         with:
           path: src/nlopt11
