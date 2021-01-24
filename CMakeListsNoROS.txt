@@ -2,29 +2,39 @@ add_compile_options(-std=c++11)
 
 include_directories(include)
 
+enable_testing()
+
 add_executable(version_and_algorithms example/version_and_algorithms.cpp)
 target_link_libraries(version_and_algorithms nlopt)
 
 add_executable(nlopt_tutorial example/nlopt_tutorial.cpp)
 target_link_libraries(nlopt_tutorial nlopt)
+add_test(nlopt_tutorial_test nlopt_tutorial)
 
 add_executable(matlab_qp2 example/matlab_qp2.cpp)
 target_link_libraries(matlab_qp2 nlopt)
+add_test(matlab_qp2_test matlab_qp2)
 
 add_executable(matlab_qp400 example/matlab_qp400.cpp)
 target_link_libraries(matlab_qp400 nlopt)
+add_test(matlab_qp400_test matlab_qp400)
 
 add_executable(matlab_rosenbrock example/matlab_rosenbrock.cpp)
 target_link_libraries(matlab_rosenbrock nlopt)
+add_test(matlab_rosenbrock_test matlab_rosenbrock)
 
 add_executable(octave_qp5 example/octave_qp5.cpp)
 target_link_libraries(octave_qp5 nlopt)
+add_test(octave_qp5_test octave_qp5)
 
 add_executable(umetani_book_3_9a example/umetani_book_3_9a.cpp)
 target_link_libraries(umetani_book_3_9a nlopt)
+add_test(umetani_book_3_9a_test umetani_book_3_9a)
 
 add_executable(umetani_book_3_9b example/umetani_book_3_9b.cpp)
 target_link_libraries(umetani_book_3_9b nlopt)
+add_test(umetani_book_3_9b_test umetani_book_3_9b)
 
 add_executable(umetani_book_qp2 example/umetani_book_qp2.cpp)
 target_link_libraries(umetani_book_qp2 nlopt)
+add_test(umetani_book_qp2_test umetani_book_qp2)
