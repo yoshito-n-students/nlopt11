@@ -42,12 +42,20 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Install rosdep
+        run: |
+          sudo apt install python-rosdep
+          sudo rosdep init
+          rosdep update
       - name: Prepare workspace
         run: |
           mkdir src
       - uses: actions/checkout@v2
         with:
           path: src/nlopt11
+      - name: Run rosdep-install
+        run: |
+          rosdep install --from-paths src --ignore-src --default-yes
       - name: Build
         run: |
           source /opt/ros/${{ matrix.rosdistro }}/setup.bash
