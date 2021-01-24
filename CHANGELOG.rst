@@ -2,9 +2,11 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.0.7 (202X-XX-XX)
+0.0.7 (2021-01-24)
 ------------------
 * Add a variant of opt11[x]::optimize()
+* Add Aithub action to build and run tests
+* Add system dependency to libnlopt-cxx-dev
 
 0.0.6 (2020-12-27)
 ------------------
