@@ -50,9 +50,8 @@ jobs:
           path: src/nlopt11
       - name: Run rosdep-install
         run: |
-          source /opt/ros/${{ matrix.rosdistro }}/setup.bash
           rosdep update
-          sudo rosdep install --from-paths src --ignore-src --default-yes
+          sudo rosdep install --rosdistro ${{ matrix.rosdistro }} --from-paths src --ignore-src --default-yes
       - name: Build
         run: |
           source /opt/ros/${{ matrix.rosdistro }}/setup.bash
