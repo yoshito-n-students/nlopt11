@@ -47,14 +47,13 @@ jobs:
           path: src/nlopt11
       - name: Run rosdep-install
         run: |
+          source /opt/ros/${{ matrix.rosdistro }}/setup.bash
           sudo apt update
           rosdep update
-          env | grep ROS
           sudo rosdep install --from-paths src --ignore-src --default-yes -r
       - name: Build
         run: |
           source /opt/ros/${{ matrix.rosdistro }}/setup.bash
-          env | grep ROS
           catkin_make
       - name: Run tests
         run: |
