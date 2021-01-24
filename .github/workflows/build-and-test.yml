@@ -1,0 +1,27 @@
+name: Build and test
+on:
+  push:
+    branches:
+      - actions
+jobs:
+  standalone:
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install cmake libnlopt-dev
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+      - name: Run tests
+        run: |
+          cd build
+          ctest --extra-verbose --output-on-failure
