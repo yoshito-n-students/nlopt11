@@ -42,9 +42,9 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Prepare workspace
-        run: |
-          mkdir src
+#      - name: Prepare workspace
+#        run: |
+#          mkdir src
       - uses: actions/checkout@v2
         with:
           path: src/nlopt11
