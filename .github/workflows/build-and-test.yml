@@ -39,4 +39,11 @@ jobs:
     container:
       image: ros:${{ matrix.rosdistro }}-ros-core
     steps:
-      - run: rosversion --distro
+      - name: Prepare workspace
+        run: |
+          mkdir src
+      - uses: actions/checkout@v2
+        with:
+          path: src
+      - run: |
+          ls --recursive
