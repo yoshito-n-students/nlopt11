@@ -11,10 +11,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
+      - name: Install dependencies 1
+        if: matrix.os == 'ubuntu16.04' || matrix.os == 'ubuntu18.04'
         run: |
           sudo apt update
           sudo apt install cmake libnlopt-dev
+      - name: Install dependencies 2
+        if: matrix.os == 'ubuntu20.04'
+        run: |
+          sudo apt update
+          sudo apt install cmake libnlopt-dev libnlopt-cxx-dev
       - name: Build
         run: |
           mkdir build
