@@ -32,7 +32,7 @@ jobs:
           cd build
           ctest --extra-verbose --output-on-failure
   ros:
-    storategy:
+    strategy:
       matrix:
         rosdistro: [kinetic, melodic, noetic]
     runs-on: ubuntu-latest
