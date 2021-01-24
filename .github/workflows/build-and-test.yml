@@ -32,8 +32,11 @@ jobs:
           cd build
           ctest --extra-verbose --output-on-failure
   ros:
+    storategy:
+      matrix:
+        rosdistro: [kinetic, melodic, noetic]
     runs-on: ubuntu-latest
     container:
-      image: ros:noetic-ros-core
+      image: ros:${{ matrix.rosdistro }}-ros-core
     steps:
       - run: rosversion --distro
