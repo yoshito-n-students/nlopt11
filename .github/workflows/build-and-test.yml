@@ -48,9 +48,7 @@ jobs:
       - name: Run rosdep-install
         run: |
           source /opt/ros/${{ matrix.rosdistro }}/setup.bash
-          sudo apt update
           rosdep update
-          rosdep --version
           sudo rosdep install --from-paths src --ignore-src --default-yes -r
       - name: Build
         run: |
