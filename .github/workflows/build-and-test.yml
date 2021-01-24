@@ -31,3 +31,9 @@ jobs:
         run: |
           cd build
           ctest --extra-verbose --output-on-failure
+  ros:
+    runs-on: ubuntu-latest
+    container:
+      image: ros:noetic-ros-core
+    steps:
+      - run: rosversion --distro
