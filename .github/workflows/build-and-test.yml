@@ -38,9 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ros:${{ matrix.rosdistro }}-ros-base
-#    defaults:
-#      run:
-#        shell: bash
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v2
         with:
