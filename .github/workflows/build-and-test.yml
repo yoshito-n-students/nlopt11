@@ -47,6 +47,7 @@ jobs:
           path: src/nlopt11
       - name: Build
         run: |
+          source /ros_entrypoint.sh
           catkin_make
       - name: Run tests
         run: |
