@@ -20,7 +20,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt upgrade
           sudo apt install ${{ matrix.deps }}
       - name: Build
         run: |
@@ -50,7 +49,6 @@ jobs:
         run: |
           source /opt/ros/${{ matrix.rosdistro }}/setup.bash
           sudo apt update
-          sudo apt upgrade
           rosdep update
           sudo rosdep install --from-paths src --ignore-src --default-yes -r
       - name: Build
