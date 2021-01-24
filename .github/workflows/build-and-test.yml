@@ -50,8 +50,9 @@ jobs:
           path: src/nlopt11
       - name: Build
         run: |
-          /ros_entrypoint.sh
+          source /opt/ros/${{ matrix.rosdistro }}/setup.bash
           catkin_make
       - name: Run tests
         run: |
+          source /opt/ros/${{ matrix.rosdistro }}/setup.bash
           catkin_make run_tests
