@@ -53,9 +53,9 @@ jobs:
           sudo rosdep install --rosdistro ${{ matrix.rosdistro }} --from-paths src --ignore-src --default-yes -r
       - name: Build
         run: |
-          . /opt/ros/${{ matrix.rosdistro }}/setup.bash
+          . /ros_entrypoint.sh
           catkin_make
       - name: Run tests
         run: |
-          . /opt/ros/${{ matrix.rosdistro }}/setup.bash
+          . /ros_entrypoint.sh
           catkin_make run_tests
