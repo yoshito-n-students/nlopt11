@@ -50,7 +50,7 @@ jobs:
           sudo apt update
           rosdep update
           env | grep ROS
-          sudo rosdep install --rosdistro ${{ matrix.rosdistro }} --from-paths src --ignore-src --default-yes -r
+          sudo rosdep install --from-paths src --ignore-src --default-yes -r
       - name: Build
         run: |
           source /opt/ros/${{ matrix.rosdistro }}/setup.bash
