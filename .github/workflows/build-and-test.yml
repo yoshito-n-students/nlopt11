@@ -38,10 +38,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ros:${{ matrix.rosdistro }}-ros-base
-    defaults:
-      run:
-        shell: bash
+#    defaults:
+#      run:
+#        shell: bash
     steps:
+      - run: env | grep ROS
       - uses: actions/checkout@v2
         with:
           path: src/nlopt11
@@ -52,9 +53,9 @@ jobs:
           sudo rosdep install --rosdistro ${{ matrix.rosdistro }} --from-paths src --ignore-src --default-yes -r
       - name: Build
         run: |
-          source /opt/ros/${{ matrix.rosdistro }}/setup.bash
+          . /opt/ros/${{ matrix.rosdistro }}/setup.bash
           catkin_make
       - name: Run tests
         run: |
-          source /opt/ros/${{ matrix.rosdistro }}/setup.bash
+          . /opt/ros/${{ matrix.rosdistro }}/setup.bash
           catkin_make run_tests
