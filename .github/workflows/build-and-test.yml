@@ -42,11 +42,6 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Install rosdep
-        run: |
-          sudo apt install python-rosdep
-          sudo rosdep init
-          rosdep update
       - name: Prepare workspace
         run: |
           mkdir src
@@ -55,6 +50,7 @@ jobs:
           path: src/nlopt11
       - name: Run rosdep-install
         run: |
+          rosdep update
           rosdep install --from-paths src --ignore-src --default-yes
       - name: Build
         run: |
