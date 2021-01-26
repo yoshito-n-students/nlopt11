@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt update
-          apt --yes install build-essential cmake ${{ matrix.nlopt-pkg }}
+          apt --yes --no-install-recommends install build-essential cmake ${{ matrix.nlopt-pkg }}
       - name: Build
         run: |
           mkdir build
