@@ -24,10 +24,10 @@ jobs:
     steps:
       - name: System update
         run: |
+          echo 'Etc/UTC' > /etc/timezone
+          ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
           apt update
           apt --yes upgrade
-        env:
-          DEBIAN_FRONTEND: noninteractive
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
