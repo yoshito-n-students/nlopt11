@@ -2,7 +2,7 @@ name: Build and test
 on:
   push:
     branches:
-      - main
+      - devel
 jobs:
   standalone:
     strategy:
@@ -16,11 +16,16 @@ jobs:
             deps: 'cmake libnlopt-cxx-dev'
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - name: System update
+        run: |
+          sudo apt update
+          sudo apt --yes upgrade
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install ${{ matrix.deps }}
+          sudo apt --yes install ${{ matrix.deps }}
       - name: Build
         run: |
           mkdir build
@@ -42,15 +47,20 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v2
+      - name: System update
+        run: |
+          sudo apt update
+          sudo apt --yes upgrade
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           path: src/nlopt11
       - name: Run rosdep-install
         run: |
           source /opt/ros/${{ matrix.rosdistro }}/setup.bash
           sudo apt update
-          rosdep update
-          sudo rosdep install --from-paths src --ignore-src --default-yes -r
+          rosdep update --rosdistro ${{ matrix.rosdistro }}
+          sudo rosdep install --default-yes -r --ignore-src --from-paths src --rosdistro ${{ matrix.rosdistro }}
       - name: Build
         run: |
           source /opt/ros/${{ matrix.rosdistro }}/setup.bash
