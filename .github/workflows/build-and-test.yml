@@ -11,19 +11,20 @@ jobs:
         include:
           - ubuntu-tag: '16.04'
             nlopt-pkg: libnlopt-dev
-            set-tz: false
+            init-tz: false
           - ubuntu-tag: '18.04'
             nlopt-pkg: libnlopt-dev
-            set-tz: false
+            init-tz: false
           - ubuntu-tag: '20.04'
             nlopt-pkg: libnlopt-cxx-dev
-            set-tz: true
+            init-tz: true # if timezone is unset, 
+                          # apt-install will ask an interactive question, which will block workflow
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ matrix.ubuntu-tag }}
     steps:
-      - name: Set timezone
-        if: ${{ matrix.set-tz }}
+      - name: Init timezone
+        if: ${{ matrix.init-tz }}
         run: |
           echo 'Etc/UTC' > /etc/timezone
           ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
