@@ -26,6 +26,8 @@ jobs:
         run: |
           apt update
           apt --yes upgrade
+        env:
+          DEBIAN_FRONTEND: noninteractive
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
