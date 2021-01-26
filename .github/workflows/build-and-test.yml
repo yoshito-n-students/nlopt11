@@ -24,14 +24,14 @@ jobs:
     steps:
       - name: System update
         run: |
-          sudo apt update
-          sudo apt --yes upgrade
+          apt update
+          apt --yes upgrade
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt --yes install ${{ matrix.deps }}
+          apt update
+          apt --yes install ${{ matrix.deps }}
       - name: Build
         run: |
           mkdir build
