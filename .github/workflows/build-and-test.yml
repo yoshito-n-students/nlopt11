@@ -10,11 +10,11 @@ jobs:
       matrix:
         include:
           - ubuntu-tag: '16.04'
-            deps: 'build-essential cmake libnlopt-dev'
+            nlopt-pkg: libnlopt-dev
           - ubuntu-tag: '18.04'
-            deps: 'build-essential cmake libnlopt-dev'
+            nlopt-pkg: libnlopt-dev
           - ubuntu-tag: '20.04'
-            deps: 'build-essential cmake libnlopt-cxx-dev'
+            nlopt-pkg: libnlopt-cxx-dev
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ matrix.ubuntu-tag }}
@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt update
-          apt --yes install ${{ matrix.deps }}
+          apt --yes install build-essential cmake ${{ matrix.nlopt-pkg }}
       - name: Build
         run: |
           mkdir build
