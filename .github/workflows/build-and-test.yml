@@ -17,7 +17,7 @@ jobs:
             deps: 'cmake libnlopt-cxx-dev'
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:${{ ubuntu-tag }}
+      image: ubuntu:${{ matrix.ubuntu-tag }}
     steps:
       - name: System update
         run: |
