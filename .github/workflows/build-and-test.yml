@@ -10,11 +10,11 @@ jobs:
       matrix:
         include:
           - ubuntu-tag: '16.04'
-            deps: 'cmake libnlopt-dev'
+            deps: 'build-essential cmake libnlopt-dev'
           - ubuntu-tag: '18.04'
-            deps: 'cmake libnlopt-dev'
+            deps: 'build-essential cmake libnlopt-dev'
           - ubuntu-tag: '20.04'
-            deps: 'cmake libnlopt-cxx-dev'
+            deps: 'build-essential cmake libnlopt-cxx-dev'
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ matrix.ubuntu-tag }}
