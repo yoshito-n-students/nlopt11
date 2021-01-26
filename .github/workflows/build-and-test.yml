@@ -6,15 +6,18 @@ on:
 jobs:
   standalone:
     strategy:
+      fail-fast: false
       matrix:
         include:
-          - os: ubuntu-16.04
+          - ubuntu-tag: '16.04'
             deps: 'cmake libnlopt-dev'
-          - os: ubuntu-18.04
+          - ubuntu-tag: '18.04'
             deps: 'cmake libnlopt-dev'
-          - os: ubuntu-20.04
+          - ubuntu-tag: '20.04'
             deps: 'cmake libnlopt-cxx-dev'
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:${{ ubuntu-tag }}
     steps:
       - name: System update
         run: |
@@ -38,6 +41,7 @@ jobs:
           ctest --extra-verbose --output-on-failure
   ros:
     strategy:
+      fail-fast: false
       matrix:
         rosdistro: [kinetic, melodic, noetic]
     runs-on: ubuntu-latest
