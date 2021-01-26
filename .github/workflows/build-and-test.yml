@@ -11,21 +11,24 @@ jobs:
         include:
           - ubuntu-tag: '16.04'
             nlopt-pkg: libnlopt-dev
+            set-tz: false
           - ubuntu-tag: '18.04'
             nlopt-pkg: libnlopt-dev
+            set-tz: false
           - ubuntu-tag: '20.04'
             nlopt-pkg: libnlopt-cxx-dev
+            set-tz: true
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ matrix.ubuntu-tag }}
-    defaults:
-      run:
-        shell: bash
     steps:
-      - name: System update
+      - name: Set timezone
+        if: ${{ matrix.set-tz }}
         run: |
           echo 'Etc/UTC' > /etc/timezone
           ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
+      - name: System update
+        run: |
           apt update
           apt --yes upgrade
       - name: Checkout
