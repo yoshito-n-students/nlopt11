@@ -2,7 +2,7 @@ name: Build and test
 on:
   push:
     branches:
-      - devel
+      - main
 jobs:
   standalone:
     strategy:
