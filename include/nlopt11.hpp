@@ -13,21 +13,29 @@ namespace nlopt {
 //////////////////////////////////////////////////////////
 // An enhanced version of nlplot::opt in flavor of c++11.
 // nlopt::opt11 supports dimension unknown until runtime.
-// This makes user codes flexible but also makes
-// unavoidable copy between c array and std::vector.
 
 class opt11 : public opt {
 public:
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // Function types
-  // (namely '[m]{n,d}func_type'. m: vector-valued, n: derivative-free, d: gradient-based)
+  ////////////////////////////////////////////////////
+  // Function types (namely '[m]{n,d}{p,v}func_type')
+  //   - m: vector-valued
+  //   - n: derivative-free, or d: gradient-based
+  //   - p: pointer, or v: std::vector
 
-  using nfunc_type = std::function<double(const std::vector<double> & /* x */)>;
-  using dfunc_type =
+  using npfunc_type = std::function<double(const int /* n */, const double *const /* x */)>;
+  using nvfunc_type = std::function<double(const std::vector<double> & /* x */)>;
+  using dpfunc_type =
+      std::function<double(const int /*n*/, const double *const /* x */, double *const /* grad */)>;
+  using dvfunc_type =
       std::function<double(const std::vector<double> & /* x */, std::vector<double> & /* grad */)>;
-  using mnfunc_type =
+  using mnpfunc_type = std::function<void(const int /* m */, double *const /* result */,
+                                          const int /* n */, const double *const /* x */)>;
+  using mnvfunc_type =
       std::function<void(std::vector<double> & /* result */, const std::vector<double> & /* x */)>;
-  using mdfunc_type =
+  using mdpfunc_type =
+      std::function<void(const int /* m */, double *const /* result */, const int /* n */,
+                         const double *const /* x */, double *const /* grad */)>;
+  using mdvfunc_type =
       std::function<void(std::vector<double> & /* result */, const std::vector<double> & /* x */,
                          std::vector<std::vector<double>> & /* grad */)>;
 
@@ -45,83 +53,65 @@ public:
   //////////////////////
   // Objective function
 
+#define NLOPT11_DEFINE_FUNC_OBJ(name, prefix)                                                      \
+  void name(const prefix##unc_type &prefix) {                                                      \
+    opt::name(dispatch_##prefix##unc, new prefix##unc_type(prefix), free_<prefix##unc_type>,       \
+              copy_<prefix##unc_type>);                                                            \
+  }
+
   using opt::set_min_objective;
-
-  void set_min_objective(const nfunc_type &nf) {
-    opt::set_min_objective(dispatch_nfunc, new nfunc_type(nf), free_<nfunc_type>,
-                           copy_<nfunc_type>);
-  }
-
-  void set_min_objective(const dfunc_type &df) {
-    opt::set_min_objective(dispatch_dfunc, new dfunc_type(df), free_<dfunc_type>,
-                           copy_<dfunc_type>);
-  }
+  NLOPT11_DEFINE_FUNC_OBJ(set_min_objective, npf)
+  NLOPT11_DEFINE_FUNC_OBJ(set_min_objective, nvf)
+  NLOPT11_DEFINE_FUNC_OBJ(set_min_objective, dpf)
+  NLOPT11_DEFINE_FUNC_OBJ(set_min_objective, dvf)
 
   using opt::set_max_objective;
-
-  void set_max_objective(const nfunc_type &nf) {
-    opt::set_max_objective(dispatch_nfunc, new nfunc_type(nf), free_<nfunc_type>,
-                           copy_<nfunc_type>);
-  }
-
-  void set_max_objective(const dfunc_type &df) {
-    opt::set_max_objective(dispatch_dfunc, new dfunc_type(df), free_<dfunc_type>,
-                           copy_<dfunc_type>);
-  }
+  NLOPT11_DEFINE_FUNC_OBJ(set_max_objective, npf)
+  NLOPT11_DEFINE_FUNC_OBJ(set_max_objective, nvf)
+  NLOPT11_DEFINE_FUNC_OBJ(set_max_objective, dpf)
+  NLOPT11_DEFINE_FUNC_OBJ(set_max_objective, dvf)
 
   ////////////////////////////////////
   // Nonlinear inequality constraints
 
-  using opt::add_inequality_constraint;
-
-  void add_inequality_constraint(const nfunc_type &nf, const double tol = 0.) {
-    opt::add_inequality_constraint(dispatch_nfunc, new nfunc_type(nf), free_<nfunc_type>,
-                                   copy_<nfunc_type>, tol);
+#define NLOPT11_DEFINE_FUNC_CONS(name, prefix)                                                     \
+  void name(const prefix##unc_type &prefix, const double tol = 0.) {                               \
+    opt::name(dispatch_##prefix##unc, new prefix##unc_type(prefix), free_<prefix##unc_type>,       \
+              copy_<prefix##unc_type>, tol);                                                       \
   }
 
-  void add_inequality_constraint(const dfunc_type &df, const double tol = 0.) {
-    opt::add_inequality_constraint(dispatch_dfunc, new dfunc_type(df), free_<dfunc_type>,
-                                   copy_<dfunc_type>, tol);
+  using opt::add_inequality_constraint;
+  NLOPT11_DEFINE_FUNC_CONS(add_inequality_constraint, npf)
+  NLOPT11_DEFINE_FUNC_CONS(add_inequality_constraint, nvf)
+  NLOPT11_DEFINE_FUNC_CONS(add_inequality_constraint, dpf)
+  NLOPT11_DEFINE_FUNC_CONS(add_inequality_constraint, dvf)
+
+#define NLOPT11_DEFINE_FUNC_MCONS(name, prefix)                                                    \
+  void name(const prefix##unc_type &prefix, const std::vector<double> &tol) {                      \
+    opt::name(dispatch_##prefix##unc, new prefix##unc_type(prefix), free_<prefix##unc_type>,       \
+              copy_<prefix##unc_type>, tol);                                                       \
   }
 
   using opt::add_inequality_mconstraint;
-
-  void add_inequality_mconstraint(const mnfunc_type &mnf, const std::vector<double> &tol) {
-    opt::add_inequality_mconstraint(dispatch_mnfunc, new mnfunc_type(mnf), free_<mnfunc_type>,
-                                    copy_<mnfunc_type>, tol);
-  }
-
-  void add_inequality_mconstraint(const mdfunc_type &mdf, const std::vector<double> &tol) {
-    opt::add_inequality_mconstraint(dispatch_mdfunc, new mdfunc_type(mdf), free_<mdfunc_type>,
-                                    copy_<mdfunc_type>, tol);
-  }
+  NLOPT11_DEFINE_FUNC_MCONS(add_inequality_mconstraint, mnpf)
+  NLOPT11_DEFINE_FUNC_MCONS(add_inequality_mconstraint, mnvf)
+  NLOPT11_DEFINE_FUNC_MCONS(add_inequality_mconstraint, mdpf)
+  NLOPT11_DEFINE_FUNC_MCONS(add_inequality_mconstraint, mdvf)
 
   //////////////////////////////////
   // Nonlinear equality constraints
 
   using opt::add_equality_constraint;
-
-  void add_equality_constraint(const nfunc_type &nf, const double tol = 0.) {
-    opt::add_equality_constraint(dispatch_nfunc, new nfunc_type(nf), free_<nfunc_type>,
-                                 copy_<nfunc_type>, tol);
-  }
-
-  void add_equality_constraint(const dfunc_type &df, const double tol = 0.) {
-    opt::add_equality_constraint(dispatch_dfunc, new dfunc_type(df), free_<dfunc_type>,
-                                 copy_<dfunc_type>, tol);
-  }
+  NLOPT11_DEFINE_FUNC_CONS(add_equality_constraint, npf)
+  NLOPT11_DEFINE_FUNC_CONS(add_equality_constraint, nvf)
+  NLOPT11_DEFINE_FUNC_CONS(add_equality_constraint, dpf)
+  NLOPT11_DEFINE_FUNC_CONS(add_equality_constraint, dvf)
 
   using opt::add_equality_mconstraint;
-
-  void add_equality_mconstraint(const mnfunc_type &mnf, const std::vector<double> &tol) {
-    opt::add_equality_mconstraint(dispatch_mnfunc, new mnfunc_type(mnf), free_<mnfunc_type>,
-                                  copy_<mnfunc_type>, tol);
-  }
-
-  void add_equality_mconstraint(const mdfunc_type &mdf, const std::vector<double> &tol) {
-    opt::add_equality_mconstraint(dispatch_mdfunc, new mdfunc_type(mdf), free_<mdfunc_type>,
-                                  copy_<mdfunc_type>, tol);
-  }
+  NLOPT11_DEFINE_FUNC_MCONS(add_equality_mconstraint, mnpf)
+  NLOPT11_DEFINE_FUNC_MCONS(add_equality_mconstraint, mnvf)
+  NLOPT11_DEFINE_FUNC_MCONS(add_equality_mconstraint, mdpf)
+  NLOPT11_DEFINE_FUNC_MCONS(add_equality_mconstraint, mdvf)
 
 protected:
   /////////////////////////
@@ -163,29 +153,51 @@ protected:
   ///////////////////////////////////
   // C-style wrappers (internal use)
 
-  static double dispatch_nfunc(unsigned int n, const double *x_c, double *grad_c, void *nf) {
+  static double dispatch_npfunc(unsigned int n, const double *x, double *grad, void *npf) {
+    if (grad) {
+      throw std::invalid_argument("Non-null gradient for a derivative-free function");
+    }
+    // Dispatch
+    return (*static_cast<npfunc_type *>(npf))(n, x);
+  }
+
+  static double dispatch_nvfunc(unsigned int n, const double *x_c, double *grad_c, void *nvf) {
     if (grad_c) {
       throw std::invalid_argument("Non-null gradient for a derivative-free function");
     }
     // c -> cpp
     const std::vector<double> x = to_vector(x_c, n);
     // Dispatch
-    return (*static_cast<nfunc_type *>(nf))(x);
+    return (*static_cast<nvfunc_type *>(nvf))(x);
   }
 
-  static double dispatch_dfunc(unsigned int n, const double *x_c, double *grad_c, void *df) {
+  static double dispatch_dpfunc(unsigned int n, const double *x, double *grad, void *dpf) {
+    // Dispatch
+    return (*static_cast<dpfunc_type *>(dpf))(n, x, grad);
+  }
+
+  static double dispatch_dvfunc(unsigned int n, const double *x_c, double *grad_c, void *dvf) {
     // c -> cpp
     const std::vector<double> x = to_vector(x_c, n);
     std::vector<double> grad = to_vector(grad_c, n);
     // Dispatch
-    const double result = (*static_cast<dfunc_type *>(df))(x, grad);
+    const double result = (*static_cast<dvfunc_type *>(dvf))(x, grad);
     // cpp -> c
     to_carray(grad, grad_c);
     return result;
   }
 
-  static void dispatch_mnfunc(unsigned int m, double *result_c, unsigned int n, const double *x_c,
-                              double *grad_c, void *mnf) {
+  static void dispatch_mnpfunc(unsigned int m, double *result, unsigned int n, const double *x,
+                               double *grad, void *mnpf) {
+    if (grad) {
+      throw std::invalid_argument("Non-null gradient for a vector-valued derivative-free function");
+    }
+    // Dispatch
+    (*static_cast<mnpfunc_type *>(mnpf))(m, result, n, x);
+  }
+
+  static void dispatch_mnvfunc(unsigned int m, double *result_c, unsigned int n, const double *x_c,
+                               double *grad_c, void *mnvf) {
     if (grad_c) {
       throw std::invalid_argument("Non-null gradient for a vector-valued derivative-free function");
     }
@@ -193,19 +205,25 @@ protected:
     std::vector<double> result = to_vector(result_c, m);
     const std::vector<double> x = to_vector(x_c, n);
     // Dispatch
-    (*static_cast<mnfunc_type *>(mnf))(result, x);
+    (*static_cast<mnvfunc_type *>(mnvf))(result, x);
     // cpp -> c
     to_carray(result, result_c);
   }
 
-  static void dispatch_mdfunc(unsigned int m, double *result_c, unsigned int n, const double *x_c,
-                              double *grad_c, void *mdf) {
+  static void dispatch_mdpfunc(unsigned int m, double *result, unsigned int n, const double *x,
+                               double *grad, void *mdpf) {
+    // Dispatch
+    (*static_cast<mdpfunc_type *>(mdpf))(m, result, n, x, grad);
+  }
+
+  static void dispatch_mdvfunc(unsigned int m, double *result_c, unsigned int n, const double *x_c,
+                               double *grad_c, void *mdvf) {
     // c -> cpp
     std::vector<double> result = to_vector(result_c, m);
     const std::vector<double> x = to_vector(x_c, n);
     std::vector<std::vector<double>> grad = to_vector2d(grad_c, m, n);
     // Dispatch
-    (*static_cast<mdfunc_type *>(mdf))(result, x, grad);
+    (*static_cast<mdvfunc_type *>(mdvf))(result, x, grad);
     // cpp -> c
     to_carray(result, result_c);
     to_carray2d(grad, grad_c);
