@@ -22,16 +22,20 @@ public:
   //   - n: derivative-free, or d: gradient-based
   //   - p: pointer, or v: std::vector
 
+  // derivative-free
   using npfunc_type = std::function<double(const int /* n */, const double *const /* x */)>;
   using nvfunc_type = std::function<double(const std::vector<double> & /* x */)>;
+  // gradient-based
   using dpfunc_type =
       std::function<double(const int /*n*/, const double *const /* x */, double *const /* grad */)>;
   using dvfunc_type =
       std::function<double(const std::vector<double> & /* x */, std::vector<double> & /* grad */)>;
+  // vector-valued & derivative-free
   using mnpfunc_type = std::function<void(const int /* m */, double *const /* result */,
                                           const int /* n */, const double *const /* x */)>;
   using mnvfunc_type =
       std::function<void(std::vector<double> & /* result */, const std::vector<double> & /* x */)>;
+  // vector-valued & gradient-based
   using mdpfunc_type =
       std::function<void(const int /* m */, double *const /* result */, const int /* n */,
                          const double *const /* x */, double *const /* grad */)>;
