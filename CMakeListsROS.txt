@@ -252,10 +252,17 @@ target_link_libraries(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_nlopt11.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+file(GLOB test_cpp_files CONFIGURE_DEPENDS "test/unit_tests_*.cpp")
+catkin_add_gtest(
+  ${PROJECT_NAME}_unit_tests
+  ${test_cpp_files}
+)
+if(TARGET ${PROJECT_NAME}_unit_tests)
+  target_link_libraries(
+    ${PROJECT_NAME}_unit_tests 
+    nlopt
+  )
+endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
