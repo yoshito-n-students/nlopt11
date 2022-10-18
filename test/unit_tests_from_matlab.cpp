@@ -1,4 +1,5 @@
 #include <cmath>
+#include <limits>
 #include <vector>
 
 #include <nlopt11.hpp>
