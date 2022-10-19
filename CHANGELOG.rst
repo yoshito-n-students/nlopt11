@@ -2,6 +2,11 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.8 (2022-10-19)
+------------------
+* Support c-style function objects as objectives & constraints in opt11
+* Remove opt11x
+
 0.0.7 (2021-01-24)
 ------------------
 * Add a variant of opt11[x]::optimize()
