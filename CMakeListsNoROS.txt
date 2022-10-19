@@ -2,8 +2,10 @@ add_compile_options(-std=c++11)
 
 include_directories(include)
 
-enable_testing()
-
 file(GLOB test_cpp_files CONFIGURE_DEPENDS "test/unit_tests_*.cpp")
 add_executable(unit_tests ${test_cpp_files})
 target_link_libraries(unit_tests nlopt gtest pthread)
+
+enable_testing()
+include(GoogleTest)
+gtest_discover_tests(unit_tests)
