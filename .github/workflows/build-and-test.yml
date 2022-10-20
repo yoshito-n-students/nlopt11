@@ -4,51 +4,7 @@ on:
     branches:
       - main
 jobs:
-  standalone:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - ubuntu-tag: '16.04'
-            nlopt-pkg: libnlopt-dev
-            init-tz: false
-          - ubuntu-tag: '18.04'
-            nlopt-pkg: libnlopt-dev
-            init-tz: false
-          - ubuntu-tag: '20.04'
-            nlopt-pkg: libnlopt-cxx-dev
-            init-tz: true # if timezone is unset, 
-                          # apt-install will ask an interactive question, which will block workflow
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:${{ matrix.ubuntu-tag }}
-    steps:
-      - name: Init timezone
-        if: ${{ matrix.init-tz }}
-        run: |
-          echo 'Etc/UTC' > /etc/timezone
-          ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
-      - name: System update
-        run: |
-          apt update
-          apt --yes upgrade
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          apt update
-          apt --yes --no-install-recommends install build-essential cmake libgtest-dev ${{ matrix.nlopt-pkg }}
-      - name: Build
-        run: |
-          mkdir build
-          cd build
-          cmake ..
-          make
-      - name: Run tests
-        run: |
-          cd build
-          ctest --extra-verbose --output-on-failure
-  ros:
+  build-and-test:
     strategy:
       fail-fast: false
       matrix:
