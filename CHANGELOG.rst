@@ -2,6 +2,10 @@
 Changelog for package nlopt11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.9 (2022-10-20)
+------------------
+* Fix build issues on no ROS environments
+
 0.0.8 (2022-10-19)
 ------------------
 * Support c-style function objects as objectives & constraints in opt11
