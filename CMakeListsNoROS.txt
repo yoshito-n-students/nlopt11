@@ -1,10 +1,12 @@
+find_package(GTest REQUIRED)
+
 add_compile_options(-std=c++11)
 
 include_directories(include)
 
 file(GLOB test_cpp_files CONFIGURE_DEPENDS "test/unit_tests_*.cpp")
 add_executable(unit_tests ${test_cpp_files})
-target_link_libraries(unit_tests nlopt gtest pthread)
+target_link_libraries(unit_tests nlopt ${GTEST_LIBRARIES} pthread)
 
 enable_testing()
 include(GoogleTest)
